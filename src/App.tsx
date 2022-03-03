@@ -1,18 +1,11 @@
 import useClipboard from "react-use-clipboard"
 import { useTextInput } from "./hooks/useTextInput";
+import { generateTable, parseBodyRows } from "./lib/table-generator"
 
 const App = () => {
   const [shopText, changeShopText] = useTextInput();
   const [officeText, changeOfficeText] = useTextInput();
   const [entireText, changeEntireText] = useTextInput();
-
-  const shopConverted = convertRows(shopText.split("\n"), 4);
-  const officeConverted = convertRows(officeText.split("\n"), 4);
-  const entireConverted = convertRows(entireText.split("\n"), 4);
-
-  const shopHeader = convertHeaderRows(["順位", "事業所", "部門", "前年対比"], 4)
-  const officeHeader = convertHeaderRows(["事業所", "前年対比"], 4)
-  const entireHeader = convertHeaderRows(["会社", "前年対比"], 4)
 
   const styles = `<style type="text/css">@media screen and (max-width: 768px) {
     .bge-contents table.small-table {
@@ -39,9 +32,9 @@ const App = () => {
 `;
 
   const result =
-    genTable(shopConverted, shopHeader, "店舗別ランキング") +
-    genTable(officeConverted, officeHeader, "事業所別ランキング") +
-    genTable(entireConverted, entireHeader, "全体") +
+    generateTable(parseBodyRows(shopText), ["順位", "事業所", "部門", "前年対比"], "店舗別ランキング") +
+    generateTable(parseBodyRows(shopText), ["事業所", "前年対比"], "事業所別ランキング") +
+    generateTable(parseBodyRows(shopText), ["会社", "前年対比"], "全体") +
     styles
 
   const [isCopied, setCopied] = useClipboard(result, {
@@ -67,45 +60,6 @@ const App = () => {
       </main>
     </div>
   );
-};
-
-const convertRows = (rows: string[], indent: number=0): string[] => {
-  const converted = rows
-    .filter(row => row !== "")
-    .map(row => {
-      const tds = row.split("\t")
-      return tds
-        .map(td => `${idt(2 + indent)}<td>${td}</td>`)
-        .join("\n")
-    })
-    .map(row => `${idt(indent)}<tr>\n${row}\n${idt(indent)}</tr>`)
-
-  return converted
-}
-
-const convertHeaderRows = (cols: string[], indent: number = 0): string => {
-  const inner = cols
-    .map(col => `${idt(indent + 2)}<th>${col}</th>`)
-    .join("\n")
-
-  return `${idt(indent)}<tr>\n${inner}
-${idt(indent)}</tr>`
-}
-
-const idt = (n: number): string => " ".repeat(n)
-
-const genTable = (body: string[], header: string, title: string): string => {
-  const text = `<h3>${title}</h3>
-<table class="small-table">
-  <thead class="head">\n${header}
-  </thead>
-  <tbody class="body">\n${body.join("\n")}
-  </tbody>
-</table>
-
-`;
-
-  return text;
 };
 
 export default App;
