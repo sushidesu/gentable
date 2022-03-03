@@ -33,8 +33,8 @@ const App = () => {
 
   const result =
     generateTable(parseBodyRows(shopText), ["順位", "事業所", "部門", "前年対比"], "店舗別ランキング") +
-    generateTable(parseBodyRows(shopText), ["事業所", "前年対比"], "事業所別ランキング") +
-    generateTable(parseBodyRows(shopText), ["会社", "前年対比"], "全体") +
+    generateTable(parseBodyRows(officeText), ["事業所", "前年対比"], "事業所別ランキング") +
+    generateTable(parseBodyRows(entireText), ["会社", "前年対比"], "全体") +
     styles
 
   const [isCopied, setCopied] = useClipboard(result, {
