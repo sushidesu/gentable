@@ -1,11 +1,8 @@
-import { useCallback, useState} from "react"
+import { useTextInput } from "./hooks/useTextInput"
 import { useConvertTable } from "./hooks/useConvertTable"
 
 const App = () => {
-  const [text, setText] = useState<string>("")
-  const handleChangeText = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value)
-  }, [])
+  const [text, handleChangeText] = useTextInput()
 
   const converted = useConvertTable(text, 4)
   const tableText = `<table class="small-table">
