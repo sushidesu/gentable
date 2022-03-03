@@ -8,9 +8,11 @@ const App = () => {
 
   return (
     <div>
-      <h1>GENTABLE</h1>
-      <textarea value={text} onChange={handleChangeText} />
-      <textarea value={text} readOnly />
+      <main className={"container"}>
+        <h1>GENTABLE</h1>
+        <textarea value={text} onChange={handleChangeText} />
+        <textarea value={text} readOnly />
+      </main>
     </div>
   )
 }
