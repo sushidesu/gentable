@@ -1,3 +1,4 @@
+import useClipboard from "react-use-clipboard"
 import { useTextInput } from "./hooks/useTextInput";
 
 const App = () => {
@@ -43,6 +44,10 @@ const App = () => {
     genTable(entireConverted, entireHeader, "全体") +
     styles
 
+  const [isCopied, setCopied] = useClipboard(result, {
+    successDuration: 1200
+  })
+
   return (
     <div>
       <main className={"container"}>
@@ -56,6 +61,9 @@ const App = () => {
         <hr />
         <p>結果</p>
         <textarea value={result} readOnly />
+        <button role={"button"} onClick={setCopied}>{
+          isCopied ? "コピーしました！" : "結果をコピー"
+        }</button>
       </main>
     </div>
   );
